@@ -29,6 +29,13 @@ const editTodo = () => {
   editId = -1;
   todoRef.value = '';
 };
+const deleteTodo = (id) => {
+  const todo = todoListRef.value.find((todo) => todo.id === id);
+  const idx = todoListRef.value.findIndex((todo) => todo.id === id);
+  if (!confirm(`Are you sure you want to delete task "${todo.task}"?`)) return;
+  todoListRef.value.splice(idx, 1);
+  localStorage.todoList = JSON.stringify(todoListRef.value);
+};
 </script>
 
 <template>
@@ -39,7 +46,7 @@ const editTodo = () => {
       v-model="todoRef"
       placeholder="+ Input TODO"
     />
-    <button class="btn green" @click="addTodo" v-if="isEditRef">Edit</button>
+    <button class="btn green" @click="editTodo" v-if="isEditRef">Edit</button>
     <button class="btn" @click="addTodo" v-else>Add</button>
   </div>
   <div class="box_list">
@@ -50,7 +57,7 @@ const editTodo = () => {
       </div>
       <div class="btns">
         <button class="btn green" @click="showTodo(todo.id)">Edit</button>
-        <button class="btn pink">Remove</button>
+        <button class="btn pink" @click="deleteTodo(todo.id)">Delete</button>
       </div>
     </div>
   </div>
