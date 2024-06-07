@@ -18,10 +18,11 @@ const showTodo = (id) => {
   const todo = todoListRef.value.find((todo) => todo.id === id);
   todoRef.value = todo.task;
   editId = id;
+  isEditRef.value = true;
 };
 const editTodo = () => {
   const todo = todoListRef.value.find((todo) => todo.id === editId);
-  const idx = todoListRef.value.findIndex((todo) => todo.id === edhitId);
+  const idx = todoListRef.value.findIndex((todo) => todo.id === editId);
   todo.task = todoRef.value;
   todoListRef.value.splice(idx, 1, todo);
   localStorage.todoList = JSON.stringify(todoListRef.value);
