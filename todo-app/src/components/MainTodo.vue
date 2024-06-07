@@ -2,11 +2,31 @@
 import { ref } from 'vue';
 const todoRef = ref('');
 const todoListRef = ref([]);
+const isEditRef = ref(false);
+
+let editId = -1;
+const ls = localStorage.todoList;
+todoListRef.value = ls ? JSON.parse(ls) : [];
 
 const addTodo = () => {
   const id = new Date().getTime();
   todoListRef.value.push({ id: id, task: todoRef.value });
   localStorage.todoList = JSON.stringify(todoListRef.value);
+  todoRef.value = '';
+};
+const showTodo = (id) => {
+  const todo = todoListRef.value.find((todo) => todo.id === id);
+  todoRef.value = todo.task;
+  editId = id;
+};
+const editTodo = () => {
+  const todo = todoListRef.value.find((todo) => todo.id === editId);
+  const idx = todoListRef.value.findIndex((todo) => todo.id === edhitId);
+  todo.task = todoRef.value;
+  todoListRef.value.splice(idx, 1, todo);
+  localStorage.todoList = JSON.stringify(todoListRef.value);
+  isEditRef.value = false;
+  editId = -1;
   todoRef.value = '';
 };
 </script>
@@ -19,7 +39,20 @@ const addTodo = () => {
       v-model="todoRef"
       placeholder="+ Input TODO"
     />
-    <button class="btn" @click="addTodo">Add</button>
+    <button class="btn green" @click="addTodo" v-if="isEditRef">Edit</button>
+    <button class="btn" @click="addTodo" v-else>Add</button>
+  </div>
+  <div class="box_list">
+    <div class="todo_list" v-for="todo in todoListRef" :key="todo.id">
+      <div class="todo">
+        <input type="checkbox" class="check" />
+        <label>{{ todo.task }}</label>
+      </div>
+      <div class="btns">
+        <button class="btn green" @click="showTodo(todo.id)">Edit</button>
+        <button class="btn pink">Remove</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -44,5 +77,45 @@ const addTodo = () => {
   color: #ffffff;
   text-align: center;
   font-size: 14px;
+}
+
+.box_list {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.todo_list {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.todo {
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+  padding: 12px;
+  width: 300px;
+  text-align: left;
+}
+
+.check {
+  border: 1px solid red;
+  transform: scale(1.6);
+  margin: 0 16px 2px 6px;
+}
+
+.btns {
+  display: flex;
+  gap: 4px;
+}
+
+.green {
+  background-color: #00c853;
+}
+
+.pink {
+  background-color: #ff4081;
 }
 </style>
