@@ -20,6 +20,11 @@ const routes = [
         component: Blog
     },
     {
+        path: '/blog/:id',
+        name: 'BlogId',
+        component: Blog
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: 'NotFound',
         component: NotFound
