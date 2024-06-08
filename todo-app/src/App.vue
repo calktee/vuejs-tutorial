@@ -21,7 +21,7 @@ import MainTodo from './components/MainTodo.vue';
   align-items: center;
   min-height: 100vh;
   width: 370px;
-  margin: 0px;
+  margin: 0px auto;
   font-family: sans-serif;
 }
 
