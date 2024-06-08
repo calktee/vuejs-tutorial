@@ -1,4 +1,4 @@
-import { callWithAsyncErrorHandling, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 export const useTodoList = () => {
   const ls = localStorage.todoList;
@@ -15,7 +15,7 @@ export const useTodoList = () => {
 
   const add = (task) => {
     const id = new Date().getTime();
-    todoListRef.value.push({ id: id, task: task });
+    todoListRef.value.push({ id: id, task: task, checked: false });
     localStorage.todoList = JSON.stringify(todoListRef.value);
   };
   const show = (id) => {
@@ -45,6 +45,10 @@ export const useTodoList = () => {
     todoListRef.value.splice(idx, 1, todo);
     localStorage.todoList = JSON.stringify(todoListRef.value);
   };
+  const countFin = computed(() => {
+    const finArr = todoListRef.value.filter((todo) => todo.checked);
+    return finArr.length;
+  });
 
-  return { todoListRef, add, show, edit, del, check };
+  return { todoListRef, add, show, edit, del, check, countFin };
 };

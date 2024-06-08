@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { useTodoList } from '../composables/useTodoList';
 const todoRef = ref('');
 const isEditRef = ref(false);
-const { todoListRef, add, show, edit, del, check } = useTodoList();
+const { todoListRef, add, show, edit, del, check, countFin } = useTodoList();
 
 const addTodo = () => {
   add(todoRef.value);
@@ -39,8 +39,13 @@ const changeCheck = (id) => {
   </div>
   <div class="box_list">
     <div class="todo_list" v-for="todo in todoListRef" :key="todo.id">
-      <div class="todo">
-        <input type="checkbox" class="check" />
+      <div class="todo" :class="{ fin: todo.checked }">
+        <input
+          type="checkbox"
+          class="check"
+          @change="changeCheck(todo.id)"
+          :checked="todo.checked"
+        />
         <label>{{ todo.task }}</label>
       </div>
       <div class="btns">
@@ -48,6 +53,10 @@ const changeCheck = (id) => {
         <button class="btn pink" @click="deleteTodo(todo.id)">Delete</button>
       </div>
     </div>
+  </div>
+  <div class="finCount">
+    <span>Finished:{{ countFin }}</span>
+    <span>Not finished:{{ todoListRef.length - countFin }}</span>
   </div>
 </template>
 
@@ -112,5 +121,15 @@ const changeCheck = (id) => {
 
 .pink {
   background-color: #ff4081;
+}
+
+.fin {
+  text-decoration: line-through;
+  background-color: #dddddd;
+  color: #777777;
+}
+.finCount {
+  margin-top: 8px;
+  font-size: 0.8em;
 }
 </style>
